@@ -15,14 +15,6 @@ async function openDb() {
   return db;
 }
 
-export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: '100mb', // Adjust the size limit as per your requirement
-    },
-  },
-};
-
 export async function GET(request: Request) {
   const db = await openDb();
   try {
