@@ -1,0 +1,168 @@
+HTML  SCSS Result  
+body {
+  font-family: 'Press Start 2P', cursive !important;
+  background: #171DA8 !important;
+  overflow: hidden !important;
+  animation: blue-me 5ms infinite !important;
+}
+body:after {   
+ box-shadow: inset 0 0 10em rgba(0,0,0,0.75);
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 100%;
+ z-index: 2;
+ content: "";
+}
+
+@keyframes blue-me {
+  28%{ background: #171DA8; }
+    30% { background:rgba(#171DA8,0.95);}
+  33%{ background: #171DA8; }
+  34% { background:rgba(#171DA8,0.9);}
+  35%{ background: #171DA8; }
+}
+
+.vhs-message{
+  animation: track 5ms infinite;
+   position: relative;
+  margin: 4em;
+}
+
+h1{
+  position: relative;
+  font-size: 3em;
+  filter: blur(3px);
+  color: #fff;
+  color: #fff;
+  text-shadow:  1px 3px green, 
+            -2px -3px red;
+}
+
+h2 {
+  position: relative;
+  font-size: 2em;
+  color: #fff;
+  text-shadow: 1px 2px green, -1px -2px red;
+  filter: blur(3px);
+  left: 0;
+  filter: blur(3px);
+  color: #fff;
+  color: #fff;
+  text-shadow:  1px 3px green, 
+            -2px -3px red;
+
+}
+
+p {
+  position: relative;
+  font-size: 1em;
+  color: #fff;
+  text-shadow: 1px 1px green, -1px -1px red;
+  filter: blur(3px);
+
+}
+
+
+
+
+.vhs-message span{
+    animation:  blur 30ms infinite, 
+          flick 50ms infinite,
+          jump 50ms infinite;
+    
+}
+@keyframes blur {
+  0%   { filter: blur(1px); opacity:0.8;}
+  50% { filter: blur(1px); opacity:1; }
+  100%{ filter: blur(1px); opacity:0.8; }
+}
+@keyframes flick {
+  50% { left:2px; }
+  51% { left:0; }
+}
+@keyframes jump {
+  30% { top:10px; }
+  31% { top:0; }
+}
+
+//From Greg Opperman
+//https://codepen.io/gopperman/pen/dElzr?editors=001
+@keyframes track {
+
+  40% {   opacity:1; 
+        top:0; 
+        left:0;  
+        transform:scale(1,1);  
+        transform:skew(0,0);}
+  41% {   opacity:0.8; top:0px; left:-100px; 
+        transform:scale(1,1.2);  
+        transform:skew(50deg,0);}
+  42% {   opacity:0.8; 
+        top:0px; 
+        left:100px; 
+        transform:scale(1,1.2);  
+        transform:skew(-80deg,0);}
+  43% { 
+        opacity:1; 
+        top:0; 
+        left:0; 
+        transform:scale(1,1);  
+        transform:skew(0,0);}
+}
+
+
+
+//Lines
+.screen-bottom{
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.line{
+  width: 100%;
+  height: 3px;
+  position: relative;
+  animation:  appear 1s infinite, 
+          flick 1s infinite,
+          big-jump 5ms infinite;
+  .white{
+    background: white;
+    position: relative;
+    top:0;
+    left: 0;
+    height: 4px;
+  }
+  .red{
+    background: red;
+    position: relative;
+    top:0;
+    left: 0;
+    height: 1px;
+  }
+  .green{
+    background: green;
+    position: relative;
+    top:0;
+    left: 0;
+    height: 1px;
+  }
+}
+@keyframes appear {
+  0%   { filter: blur(5px); opacity: 0.85;}
+  50% { filter: blur(3px); opacity: 0.85;}
+  100%{ filter: blur(4px); opacity: 0.85;}
+}
+
+@keyframes big-jump {
+  0% { top:0; }
+  10% { top: -100px; }
+  12% { top:0; }
+  54% { top:0; }
+  55% { top: -300px; }
+  56% { top:0; }
+  86% { top:0; }
+  87% { top: -600px; }
+  88% { top:0; }
+}

@@ -1,0 +1,115 @@
+CREATE TABLE IF NOT EXISTS Films (
+      film_id TEXT PRIMARY KEY,
+      title TEXT,
+      imdb_id TEXT,
+      budget TEXT,
+      gross_us_canada TEXT,
+      gross_world TEXT,
+      release_date TEXT,
+      release_year INTEGER,
+      type TEXT
+    );
+
+    CREATE TABLE IF NOT EXISTS BoxOffice (
+      film_id TEXT,
+      opening_weekend TEXT,
+      gross_us_canada TEXT,
+      gross_world TEXT,
+      release_date TEXT,
+      release_year INTEGER,
+      FOREIGN KEY (film_id) REFERENCES Films(film_id)
+    );
+
+    CREATE TABLE IF NOT EXISTS Awards (
+      award_id TEXT PRIMARY KEY,
+      film_id TEXT,
+      year TEXT,
+      award_name TEXT,
+      award_category TEXT,
+      award_winner TEXT,
+      award_status TEXT,
+      FOREIGN KEY (film_id) REFERENCES Films(film_id)
+    );
+
+    CREATE TABLE IF NOT EXISTS Genres (
+      genre_id TEXT PRIMARY KEY,
+      genre_name TEXT UNIQUE
+    );
+
+    CREATE TABLE IF NOT EXISTS FilmGenres (
+      film_id TEXT,
+      genre_id TEXT,
+      FOREIGN KEY (film_id) REFERENCES Films(film_id),
+      FOREIGN KEY (genre_id) REFERENCES Genres(genre_id),
+      PRIMARY KEY (film_id, genre_id)
+    );
+
+    CREATE TABLE IF NOT EXISTS Locations (
+      location_id TEXT PRIMARY KEY,
+      specificLocation TEXT,
+      city TEXT,
+      province TEXT,
+      country TEXT
+    );
+
+    CREATE TABLE IF NOT EXISTS FilmLocations (
+      film_id TEXT,
+      location_id TEXT,
+      FOREIGN KEY (film_id) REFERENCES Films(film_id),
+      FOREIGN KEY (location_id) REFERENCES Locations(location_id),
+      PRIMARY KEY (film_id, location_id)
+    );
+
+    CREATE TABLE IF NOT EXISTS Companies (
+      company_id TEXT PRIMARY KEY,
+      name TEXT,
+      imdb_id TEXT,
+      website TEXT,
+      phone TEXT,
+      fax TEXT,
+      email TEXT
+    );
+
+    CREATE TABLE IF NOT EXISTS FilmCompanies (
+      film_id TEXT,
+      company_id TEXT,
+      role TEXT,
+      FOREIGN KEY (film_id) REFERENCES Films(film_id),
+      FOREIGN KEY (company_id) REFERENCES Companies(company_id),
+      PRIMARY KEY (film_id, company_id, role)
+    );
+
+    CREATE TABLE IF NOT EXISTS People (
+      person_id TEXT PRIMARY KEY,
+      name TEXT,
+      imdb_id TEXT
+    );
+
+    CREATE TABLE IF NOT EXISTS FilmCrew (
+      film_id TEXT,
+      person_id TEXT,
+      role TEXT,
+      FOREIGN KEY (film_id) REFERENCES Films(film_id),
+      FOREIGN KEY (person_id) REFERENCES People(person_id),
+      PRIMARY KEY (film_id, person_id, role)
+    );
+
+    CREATE TABLE IF NOT EXISTS Cast (
+      film_id TEXT,
+      person_id TEXT,
+      picture TEXT,
+      imdb_id TEXT,
+      starmeter TEXT,
+      FOREIGN KEY (film_id) REFERENCES Films(film_id),
+      FOREIGN KEY (person_id) REFERENCES People(person_id),
+      PRIMARY KEY (film_id, person_id)
+    );
+
+    CREATE TABLE IF NOT EXISTS Producers (
+      film_id TEXT,
+      person_id TEXT,
+      role_detail TEXT,
+      FOREIGN KEY (film_id) REFERENCES Films(film_id),
+      FOREIGN KEY (person_id) REFERENCES People(person_id),
+      PRIMARY KEY (film_id, person_id)
+    );
