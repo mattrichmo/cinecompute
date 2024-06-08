@@ -4,7 +4,27 @@ import React, { useRef, useState } from 'react';
 import { ForceGraph3D } from 'react-force-graph';
 import InfoCard from '@/app/components/InfoCard/InfoCard'; // Ensure the import path is correct
 
-const ForceGraph = ({ data }) => {
+
+interface ForceGraphNode {
+    // Define properties of a node here
+    // For example:
+    id: string;
+    type?: string; // Optional, depending on your data structure
+  }
+  
+  interface ForceGraphLink {
+    // Define properties of a link here
+    // For example:
+    source: string;
+    target: string;
+  }
+  
+  interface ForceGraphData {
+    nodes: ForceGraphNode[];
+    links: ForceGraphLink[];
+  }
+  
+  const ForceGraph = ({ data }: { data: ForceGraphData }) => {
     console.log(`Number of Nodes In Force Graph: ${data.nodes.length}`, `Number of Links: ${data.links.length}`);
 
     const fgRef = useRef();

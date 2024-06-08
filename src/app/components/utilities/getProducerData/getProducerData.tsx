@@ -15,7 +15,7 @@ type Data = {
   links: Link[];
 };
 
-export const getProducerData = async () => {
+export const getProducerData = async (): Promise<Data> => {
   let data: Data = {
     nodes: [],
     links: []
@@ -33,7 +33,7 @@ export const getProducerData = async () => {
 
     if (!response.ok) {
       console.error(`Error: HTTP ${response.status} ${response.statusText}`);
-      return;
+      throw new Error(`HTTP ${response.status} ${response.statusText}`);
     }
 
     const apiData = await response.json();
@@ -108,16 +108,11 @@ export const getProducerData = async () => {
     data.nodes = nodes;
     data.links = links;
 
+    return data;
   } catch (error) {
     console.error(`Error fetching producer data: ${error}`);
-    return;
+    throw error; // Throw the error to be caught by the calling component
   }
-
-  // Console log the number of nodes and links
-  console.log(`Total number of nodes: ${data.nodes.length}`);
-  console.log(`Total number of links: ${data.links.length}`);
-
-  return data;
 };
 
 export default getProducerData;

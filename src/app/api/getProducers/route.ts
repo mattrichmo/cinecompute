@@ -5,6 +5,11 @@ import { NextResponse } from 'next/server';
 
 let db: Database | null = null; // Declare db outside to reuse the db instance across requests
 
+interface ProducedWith {
+  id: string; // or number, depending on your ID type
+  workedOn: string[]; // or number[], depending on your film_id type
+}
+
 async function openDb() {
   if (!db) {
     db = await open({
@@ -110,8 +115,8 @@ export async function GET(request: Request) {
       // Find other producers who worked on the same film
       const otherProducers = producersResults.filter(p => p.film_id === row.film_id && p.person_id !== row.person_id);
       otherProducers.forEach(otherProducer => {
-        const existing = producer.affiliations.producedWith.find(pw => pw.id === otherProducer.person_id);
-        if (existing) {
+      const existing = producer.affiliations.producedWith.find((pw: ProducedWith) => pw.id === otherProducer.person_id);        
+      if (existing) {
           existing.workedOn.push(row.film_id);
         } else {
           producer.affiliations.producedWith.push({
@@ -134,7 +139,8 @@ export async function GET(request: Request) {
     return NextResponse.json(data);
 
   } catch (error) {
-    console.error("Error processing request:", error);
-    return NextResponse.json({ message: 'Failed to fetch data', error: error.message });
-  }
+  console.error("Error processing request:", error);
+  // Assert error is of type Error to access message property
+  return NextResponse.json({ message: 'Failed to fetch data', error: (error as Error).message });
+}
 }
