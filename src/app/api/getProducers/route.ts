@@ -17,9 +17,10 @@ async function openDb() {
 
 export const config = {
   api: {
-    bodyParser: true,
-    responseLimit: '100mb',
-  }
+    bodyParser: {
+      sizeLimit: '100mb', // Adjust the size limit as per your requirement
+    },
+  },
 };
 
 export async function GET(request: Request) {
