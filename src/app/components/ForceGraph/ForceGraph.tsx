@@ -1,20 +1,14 @@
 "use client";
-
 import React, { useEffect, useState } from 'react';
-import { ForceGraph3D } from 'react-force-graph';
+import dynamic from 'next/dynamic';
 import data from "../../../../public/data/datasets/producers.json";
 
+// Dynamically import the ForceGraph3D component, with SSR disabled
+const ForceGraph3D = dynamic(() => import('react-force-graph').then(mod => mod.ForceGraph3D), {
+  ssr: false, // Disable server-side rendering for this component
+});
+
 const ForceGraphComponent = () => {
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(typeof window!== 'undefined');
-  }, []);
-
-  if (!isClient) {
-    return null; // Return null or a loading indicator while on the server
-  }
-
   return (
     <div style={{ height: '100vh', width: '100vw' }}>
       <ForceGraph3D
