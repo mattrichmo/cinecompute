@@ -1,4 +1,5 @@
 "use client";
+import dynamic from 'next/dynamic';
 import React, { useRef, useState, useEffect, forwardRef, Ref } from 'react';
 import { ForceGraph3D } from 'react-force-graph';
 import rawData from '../../../../public/data/datasets/producersFilms.json'; // Ensure the import path is correct
@@ -22,6 +23,7 @@ interface Link {
     target: string | Node;
     [key: string]: any;
 }
+
 
 // Define a custom type for ForceGraphMethods based on the methods you need
 interface ForceGraphMethods {
@@ -52,7 +54,7 @@ const ForceGraph: React.FC = () => {
     const clickedNodeColor = 'rgb(255, 255, 0)';
     const clickedLinkColor = 'rgb(255, 255, 0)';
     const highlightLinkColor = 'rgba(91, 208, 83, 0.8)';
-    const defaultLinkColor = 'rgba(255,255,255, 0.99)'; // Step 1: Declare the default link color
+    const defaultLinkColor = 'rgba(255,255,255)'; // Step 1: Declare the default link color
 
 
     
