@@ -6,7 +6,6 @@
 import React from 'react';
 // Import server components with .server.js extensions
 import ForceGraph from "@/app/components/ForceGraph/ForceGraph";
-import data from "../../../../public/data/datasets/producers.json"
 
 // Convert to default server component export
 export default async function ProducerGraph() {
@@ -14,7 +13,7 @@ export default async function ProducerGraph() {
   return (
     <div style={{ backgroundColor: 'rgba(0, 0, 17, 0.5)' }} className="relative min-h-screen text-white">
       <div className="absolute top-0 left-0 w-full h-full z-10">
-        <ForceGraph data={data}  />
+        <ForceGraph/>
       </div>
 
       <div className="absolute top-0 mt-20 z-20 w-1/4">
