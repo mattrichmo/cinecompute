@@ -88,16 +88,16 @@ const ForceGraph = () => {
     loadData();
   }, [selectedToggle]);
 
-/* useEffect(() => {
+useEffect(() => {
     if (fgRef.current && fgRef.current.postProcessingComposer) {
       // Add bloom processing to links only
       const bloomPass = new UnrealBloomPass();
-      bloomPass.strength = 0.9;
+      bloomPass.strength = 0.5;
       bloomPass.radius = 0.1;
-      bloomPass.threshold = 0.5;
+      bloomPass.threshold = 0.4;
       fgRef.current.postProcessingComposer().addPass(bloomPass);
     }
-  }, [fgRef]);  */
+  }, [fgRef]);
 
   const handleNodeClick = useCallback(
     (node) => {
@@ -161,6 +161,7 @@ return (
     <div className="absolute top-0 left-0 w-full h-full z-10">
       <ForceGraph3D
         ref={fgRef}
+        backgroundColor="#000000"
         graphData={graphData}
         nodeLabel={node => node.name || ''}
         onNodeClick={handleNodeClick}
@@ -181,17 +182,28 @@ return (
         linkWidth={link => highlightLinks.has(link) || clickedLinks.has(link) ? 2 : 6}
         linkDirectionalParticles={link => highlightLinks.has(link) || clickedLinks.has(link) ? 4 : 0}
         linkDirectionalParticleWidth={4}
+        /* nodeThreeObject={node => {
+            if (node.type === 'film') {
+              // Create a cube for films
+              return new THREE.Mesh(
+                new THREE.BoxGeometry(10, 10, 10), // Adjust size as needed
+                new THREE.MeshBasicMaterial({ color: node.color || colors.nodes.filmNode })
+              );
+            } else {
+              // Default sphere for other types
+              const radius = 7; // Adjust size as needed
+              const segments = 8; // Increase or decrease for performance or quality
+              return new THREE.Mesh(
+                new THREE.SphereGeometry(radius, segments, segments),
+                new THREE.MeshBasicMaterial({ color: node.color || colors.nodes.producerNode })
+              );
+            }
+          }} */
+          
       />
     </div>
-    {/* SearchBar and Toggles for all screens, Text hidden on mobile */}
-    <div className="absolute top-0 z-20 w-full lg:w-2/12">
-      <div className="mt-20 ml-20">
-        <SearchBar
-          nodeNames={graphData.nodes}
-          onNodeSelect={handleNodeClick}
-        />
-      </div>
-      {/* Text hidden on mobile screens */}
+    <div className="absolute top-0 z-20 w-full lg:w-4/12">
+
       <div className="hidden lg:block">
         <h1 className="text-6xl mt-20 ml-20 leading-tight">Canadian Cinema Data</h1>
         <div className="text-sm mt-10 ml-20">
@@ -201,12 +213,20 @@ return (
           <p>The data for this visualization was meticulously sourced by scraping information from all films produced in Canada, filtered to include productions from the past year.</p>
         </div>
       </div>
-      {/* Toggles at the bottom for all screens */}
-      <div className="mt-20 ml-20">
-        <div className="relative">
-          <Toggles selectedToggle={selectedToggle} setSelectedToggle={setSelectedToggle} />
+      <div>
+        <div className="mt-5 ml-5 mr-5 lg:mt-20 lg:ml-20 lg:mr-20">
+          <div className="relative">
+            <Toggles selectedToggle={selectedToggle} setSelectedToggle={setSelectedToggle} />
+          </div>
+        </div>
+        <div className="mt-2 ml-5 mr-5 lg:mt-5 lg:ml-20 lg:mr-20">
+          <SearchBar
+            nodeNames={graphData.nodes}
+            onNodeSelect={handleNodeClick}
+          />
         </div>
       </div>
+
     </div>
     <div>
       {activeNode && (

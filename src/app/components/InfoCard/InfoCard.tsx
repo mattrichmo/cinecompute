@@ -1,12 +1,40 @@
+import React from 'react';
+import Image from 'next/image';
+
 interface InfoCardProps {
   title: string;
   value: number;
 }
 
+interface PeopleCardProps {
+  name: string;
+  imdb: string;
+  numFilms: number;
+  numConnections: number;
+  type: string; // producer, cast, grip
+}
+
+interface CompanyCardProps {
+  name: string;
+  imdb: string;
+  numFilms: number;
+  numConnections: number;
+  website: string;
+  type: string; // company
+}
+
+interface FilmCardProps {
+  title: string;
+  imdb: string;
+  budget: number;
+  revenue: number;
+  type: string; //
+}
+
 const InfoCard: React.FC<InfoCardProps> = ({ title, value }) => {
   return (
-    <div className="absolute top-0 right-0 m-10 z-30 max-w-xs cursor-pointer rounded-lg bg-white p-2 shadow duration-150 hover:scale-105 hover:shadow-md">
-      <img className="w-full rounded-lg object-cover object-center" src="./img/default.webp" alt="product" />
+    <div className="absolute inset-x-0 bottom-0 mx-4 mb-4 z-30 max-w-full rounded-lg bg-white p-2 shadow duration-150 hover:scale-105 hover:shadow-md md:left-auto md:right-0 md:top-0 md:m-10 md:max-w-xs">
+      <Image className="hidden w-full rounded-lg object-cover object-center md:block" src="/img/graph/grip.png" alt="product" width={300} height={200} />
       <div>
         <div className="my-6 flex items-center justify-between px-4">
           <p className="font-bold text-gray-500">Name</p>
