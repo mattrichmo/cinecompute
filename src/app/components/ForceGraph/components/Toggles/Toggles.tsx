@@ -38,7 +38,7 @@ const Toggles: React.FC<TogglesProps> = ({ selectedToggle, setSelectedToggle }) 
     <div>
       <div className="mb-2"><p className="text-xs text-gray-500">Click To See Data</p></div>
       <div className="grid grid-cols-2 gap-4 toggle border border-white rounded p-2 text-xs">
-        {['Producers', 'Companies', 'Films', 'Technicians', 'Cast'].map((label) => (
+        {['Producers', 'Companies', 'Cast', 'Grips'].map((label) => (
           <Toggle
             key={label}
             label={label}

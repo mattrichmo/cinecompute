@@ -9,6 +9,8 @@ import InfoCard from "../InfoCard/InfoCard";
 import Toggles from "./components/Toggles/Toggles";
 import getProducerData from "./components/getProducerData";
 import getDistributorData from "./components/getDistributorData";
+import getCastData from "./components/getCastData";
+import getGripsData from "./components/getGripsData";
 
 const ForceGraph = () => {
 
@@ -45,6 +47,12 @@ const ForceGraph = () => {
           break;
         case 'Companies':
           newData = getDistributorData();
+          break;
+        case 'Cast':
+          newData = getCastData();
+          break;
+        case 'Grips':
+          newData = getGripsData();
           break;
         // Add cases for other toggles
         default:
