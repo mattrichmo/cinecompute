@@ -5,8 +5,10 @@ import "@/app/styles/globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "CineCompute",
-  description: " Data and Machine Learning Services for the Film & Entertainment Industry",
+  openGraph: {
+    title: "CineCompute",
+    description: "Data and Machine Learning Services for the Film & Entertainment Industry",
+  },
 };
 
 export default function RootLayout({
