@@ -1,0 +1,10 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "films",
+            "database": "/Users/cybertron/Code/cinedata/src/database/films.sqlite"
+        }
+    ]
+}
