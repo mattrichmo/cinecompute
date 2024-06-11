@@ -156,87 +156,68 @@ const ForceGraph = () => {
     fgRef.current.refresh();
   };
 
-  return (
-    <div style={{ backgroundColor: 'rgba(0, 0, 17, 0.5)' }} className="relative min-h-screen text-white">
-      <div className="absolute top-0 left-0 w-full h-full z-10">
-        <ForceGraph3D
-          ref={fgRef}
-          graphData={graphData}
-          nodeLabel={node => node.name || ''}
-          onNodeClick={handleNodeClick}
-          onBackgroundClick={handleBackgroundClick}
-          onNodeHover={handleNodeHover}
-          nodeColor={node => {
-            // Check if the node is clicked or highlighted
-            if (clickedNodes.has(node) || highlightNodes.has(node)) {
-              return colors.nodes.selectedNode; // Apply the selectedNode color if the node is clicked or highlighted
-            }
-            // Otherwise, check the type of the node to determine its default color
-            return node.type === 'film'? colors.nodes.filmNode : colors.nodes.producerNode;
-          }}
-/*           nodeThreeObject={node => {
-            if (node.type === 'film') {
-              // Create a cube for films
-              return new THREE.Mesh(
-                new THREE.BoxGeometry(10, 10, 10), // Adjust size as needed
-                new THREE.MeshBasicMaterial({ color: node.color || colors.nodes.filmNode })
-              );
-            } else {
-              // Default sphere for other types
-              const radius = 7; // Adjust size as needed
-              const segments = 8; // Increase or decrease for performance or quality
-              return new THREE.Mesh(
-                new THREE.SphereGeometry(radius, segments, segments),
-                new THREE.MeshBasicMaterial({ color: node.color || colors.nodes.producerNode })
-              );
-            }
-          }} */
-          
-          linkColor={link => {
-            if (clickedLinks.has(link)) {
-              return colors.links.selectedLink;
-            }
-            return highlightLinks.has(link) ? colors.links.highlightedLink : colors.links.defaultLink;
-          }}
-          linkWidth={link => highlightLinks.has(link) || clickedLinks.has(link) ? 2 : 6}
-          linkDirectionalParticles={link => highlightLinks.has(link) || clickedLinks.has(link) ? 4 : 0}
-          linkDirectionalParticleWidth={4}
-  
+return (
+  <div style={{ backgroundColor: 'rgba(0, 0, 17, 0.5)' }} className="relative min-h-screen text-white">
+    <div className="absolute top-0 left-0 w-full h-full z-10">
+      <ForceGraph3D
+        ref={fgRef}
+        graphData={graphData}
+        nodeLabel={node => node.name || ''}
+        onNodeClick={handleNodeClick}
+        onBackgroundClick={handleBackgroundClick}
+        onNodeHover={handleNodeHover}
+        nodeColor={node => {
+          if (clickedNodes.has(node) || highlightNodes.has(node)) {
+            return colors.nodes.selectedNode;
+          }
+          return node.type === 'film' ? colors.nodes.filmNode : colors.nodes.producerNode;
+        }}
+        linkColor={link => {
+          if (clickedLinks.has(link)) {
+            return colors.links.selectedLink;
+          }
+          return highlightLinks.has(link) ? colors.links.highlightedLink : colors.links.defaultLink;
+        }}
+        linkWidth={link => highlightLinks.has(link) || clickedLinks.has(link) ? 2 : 6}
+        linkDirectionalParticles={link => highlightLinks.has(link) || clickedLinks.has(link) ? 4 : 0}
+        linkDirectionalParticleWidth={4}
+      />
+    </div>
+    {/* SearchBar and Toggles for all screens, Text hidden on mobile */}
+    <div className="absolute top-0 z-20 w-full lg:w-2/12">
+      <div className="mt-20 ml-20">
+        <SearchBar
+          nodeNames={graphData.nodes}
+          onNodeSelect={handleNodeClick}
         />
       </div>
-      <div className="absolute top-0 mt-20 z-20 w-1/4">
+      {/* Text hidden on mobile screens */}
+      <div className="hidden lg:block">
         <h1 className="text-6xl mt-20 ml-20 leading-tight">Canadian Cinema Data</h1>
         <div className="text-sm mt-10 ml-20">
-    <p>This 3D graph illustrates the intricate relationships within the Canadian film industry, highlighting the connections between productions, producers, companies, cast, and grips involved. It provides a comprehensive map of these relationships, particularly focusing on producer collaborations.</p>
-</div>
-<div className="text-sm mt-2 ml-20">
-    <p>The data for this visualization was meticulously sourced by scraping information from all films produced in Canada, filtered to include productions from the past year.</p>
-</div>
-
-        <div className="ml-20 mt-20">
-          <div className="relative mt-20 z-20">
-          <Toggles selectedToggle={selectedToggle} setSelectedToggle={setSelectedToggle} />
-          </div>
+          <p>This 3D graph illustrates the intricate relationships within the Canadian film industry, highlighting the connections between productions, producers, companies, cast, and grips involved. It provides a comprehensive map of these relationships, particularly focusing on producer collaborations.</p>
         </div>
-        <div className="ml-20 mt-20">
-          <div className="relative mt-20 z-20">
-            <SearchBar
-              nodeNames={graphData.nodes}
-              onNodeSelect={handleNodeClick}
-            />
-          </div>
+        <div className="text-sm mt-2 ml-20">
+          <p>The data for this visualization was meticulously sourced by scraping information from all films produced in Canada, filtered to include productions from the past year.</p>
         </div>
       </div>
-      <div>
-        {activeNode && (
-          <InfoCard
-            node={activeNode}
-            onClose={handleBackgroundClick}
-          />
-        )}
+      {/* Toggles at the bottom for all screens */}
+      <div className="mt-20 ml-20">
+        <div className="relative">
+          <Toggles selectedToggle={selectedToggle} setSelectedToggle={setSelectedToggle} />
+        </div>
       </div>
     </div>
-  );
+    <div>
+      {activeNode && (
+        <InfoCard
+          node={activeNode}
+          onClose={handleBackgroundClick}
+        />
+      )}
+    </div>
+  </div>
+);
 };
 
 export default ForceGraph;
