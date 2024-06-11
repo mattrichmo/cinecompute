@@ -157,40 +157,66 @@ const handleBackgroundClick = () => {
     fgRef.current.refresh();
   };
 
+  // Calculate min and max number of connections
+  const minConnections = Math.min(...graphData.nodes.map(node => {
+    if (node.values.film) return node.values.film.numConnections || 0;
+    if (node.values.producers) return node.values.producers.numConnections || 0;
+    if (node.values.companies) return node.values.companies.numConnections || 0;
+    if (node.values.cast) return node.values.cast.numConnections || 0;
+    return 0;
+  }));
+
+  const maxConnections = Math.max(...graphData.nodes.map(node => {
+    if (node.values.film) return node.values.film.numConnections || 0;
+    if (node.values.producers) return node.values.producers.numConnections || 0;
+    if (node.values.companies) return node.values.companies.numConnections || 0;
+    if (node.values.cast) return node.values.cast.numConnections || 0;
+    return 0;
+  }));
+
+  const minNodeSize = 1;
+  const maxNodeSize = 30;
+
+  // Function to calculate node size
+  const getNodeSize = (numConnections) => {
+    if (maxConnections === minConnections) return minNodeSize;
+    return minNodeSize + Math.round((numConnections - minConnections) * (maxNodeSize - minNodeSize) / (maxConnections - minConnections));
+  };
+
 return (
   <div style={{ backgroundColor: 'rgba(0, 0, 17, 0.5)' }} className="relative min-h-screen text-white">
     <div className="absolute top-0 left-0 w-full h-full z-10">
-      <ForceGraph3D
-        ref={fgRef}
-        backgroundColor="#000000"
-        graphData={graphData}
-        nodeLabel={node => node.name || ''}
-        onNodeClick={handleNodeClick}
-        onBackgroundClick={handleBackgroundClick}
-        onNodeHover={handleNodeHover}
-        nodeColor={node => {
-          if (clickedNodes.has(node) || highlightNodes.has(node)) {
-            return colors.nodes.selectedNode; // Selected or highlighted node color
-          } else if (clickedNodes.size > 0) {
-            return "rgba(255, 255, 255, 0.1)"; // Reduced opacity for non-selected nodes when any node is clicked
-          } else {
-            return colors.nodes.defaultNode; // Default node color
-          }
-        }}
-        linkColor={link => {
-          if (clickedLinks.has(link) || highlightLinks.has(link)) {
-            return colors.links.selectedLink; // Selected or highlighted link color
-          } else if (clickedLinks.size > 0) {
-            return "rgba(255, 255, 255, 0.1)"; // Reduced opacity for non-selected links when any node is clicked
-          } else {
-            return colors.links.defaultLink; // Default link color
-          }
-        }}
-        linkWidth={link => highlightLinks.has(link) || clickedLinks.has(link) ? 2 : 6}
-        linkDirectionalParticles={link => highlightLinks.has(link) || clickedLinks.has(link) ? 4 : 0}
-        linkDirectionalParticleWidth={4}
-        warmupTicks={50}
-       /*  nodeThreeObject={node => {
+    <ForceGraph3D
+          ref={fgRef}
+          backgroundColor="#000000"
+          graphData={graphData}
+          nodeLabel={node => node.name || ''}
+          onNodeClick={handleNodeClick}
+          onBackgroundClick={handleBackgroundClick}
+          onNodeHover={handleNodeHover}
+          linkColor={link => {
+            if (clickedLinks.has(link) || highlightLinks.has(link)) {
+              return colors.links.selectedLink; // Selected or highlighted link color
+            } else if (clickedLinks.size > 0) {
+              return "rgba(255, 255, 255, 0.1)"; // Reduced opacity for non-selected links when any link is clicked
+            } else {
+              return colors.links.defaultLink; // Default link color
+            }
+          }}
+          nodeColor={node => {
+            if (clickedNodes.has(node) || highlightNodes.has(node)) {
+              return colors.nodes.selectedNode; // Selected or highlighted node color
+            } else if (clickedNodes.size > 0) {
+              return "rgba(255, 255, 255, 0.1)"; // Reduced opacity for non-selected nodes when any node is clicked
+            } else {
+              return colors.nodes.defaultNode; // Default node color
+            }
+          }}
+          nodeVal={node => {
+            return node.values.film?.numConnections || node.values.producers?.numConnections || node.values.companies?.numConnections || node.values.cast?.numConnections || 0;
+          }}
+          nodeRelSize={3} // Adjust this value as needed to control the relative size of the nodes
+          /*  nodeThreeObject={node => {
             if (node.type === 'film') {
               // Create a cube for films
               return new THREE.Mesh(
@@ -207,8 +233,7 @@ return (
               );
             }
           }}  */
-          
-      />
+        />
     </div>
     <div className="absolute top-0 z-20 w-full lg:w-4/12">
 

@@ -1,4 +1,4 @@
-import data from '../../../../../../public/data/datasets/companygraphdata.json'; // Ensure the import path is correct
+import data from '../../../../../../public/data/datasets/companyGraphData.json'; // Ensure the import path is correct
 
 
 const getCompanyData = () => {
