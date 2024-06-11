@@ -7,10 +7,11 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 import SearchBar from "./components/SearchBar/SearchBar";
 import InfoCard from "../InfoCard/InfoCard";
 import Toggles from "./components/Toggles/Toggles";
-import getProducerData from "./components/getProducerData";
-import getDistributorData from "./components/getDistributorData";
-import getCastData from "./components/getCastData";
-import getGripsData from "./components/getGripsData";
+import getProducerData from "./components/getGraphData/getProducerData";
+import getCompanyData from "./components/getGraphData/getCompanyData";
+import getCastData from "./components/getGraphData/getCastData";
+import getGripsData from "./components/getGraphData/getGripsData";
+import './ForceGraph.css';
 
 const ForceGraph = () => {
 
@@ -46,7 +47,7 @@ const ForceGraph = () => {
           newData = getProducerData();
           break;
         case 'Companies':
-          newData = getDistributorData();
+          newData = getCompanyData();
           break;
         case 'Cast':
           newData = getCastData();
@@ -92,9 +93,9 @@ useEffect(() => {
     if (fgRef.current && fgRef.current.postProcessingComposer) {
       // Add bloom processing to links only
       const bloomPass = new UnrealBloomPass();
-      bloomPass.strength = 0.5;
-      bloomPass.radius = 0.1;
-      bloomPass.threshold = 0.4;
+      bloomPass.strength = 0.4;
+      bloomPass.radius = 0.5;
+      bloomPass.threshold = 0.6;
       fgRef.current.postProcessingComposer().addPass(bloomPass);
     }
   }, [fgRef]);
@@ -122,11 +123,11 @@ useEffect(() => {
     [fgRef]
   );
 
-  const handleBackgroundClick = () => {
-    setActiveNode(null);
-    setClickedNodes(new Set());
-    setClickedLinks(new Set());
-  };
+const handleBackgroundClick = () => {
+  setActiveNode(null);
+  setClickedNodes(new Set());
+  setClickedLinks(new Set());
+};
 
   const handleNodeHover = node => {
     highlightNodes.clear();
@@ -169,20 +170,27 @@ return (
         onNodeHover={handleNodeHover}
         nodeColor={node => {
           if (clickedNodes.has(node) || highlightNodes.has(node)) {
-            return colors.nodes.selectedNode;
+            return colors.nodes.selectedNode; // Selected or highlighted node color
+          } else if (clickedNodes.size > 0) {
+            return "rgba(255, 255, 255, 0.1)"; // Reduced opacity for non-selected nodes when any node is clicked
+          } else {
+            return colors.nodes.defaultNode; // Default node color
           }
-          return node.type === 'film' ? colors.nodes.filmNode : colors.nodes.producerNode;
         }}
         linkColor={link => {
-          if (clickedLinks.has(link)) {
-            return colors.links.selectedLink;
+          if (clickedLinks.has(link) || highlightLinks.has(link)) {
+            return colors.links.selectedLink; // Selected or highlighted link color
+          } else if (clickedLinks.size > 0) {
+            return "rgba(255, 255, 255, 0.1)"; // Reduced opacity for non-selected links when any node is clicked
+          } else {
+            return colors.links.defaultLink; // Default link color
           }
-          return highlightLinks.has(link) ? colors.links.highlightedLink : colors.links.defaultLink;
         }}
         linkWidth={link => highlightLinks.has(link) || clickedLinks.has(link) ? 2 : 6}
         linkDirectionalParticles={link => highlightLinks.has(link) || clickedLinks.has(link) ? 4 : 0}
         linkDirectionalParticleWidth={4}
-        /* nodeThreeObject={node => {
+        warmupTicks={50}
+       /*  nodeThreeObject={node => {
             if (node.type === 'film') {
               // Create a cube for films
               return new THREE.Mesh(
@@ -198,20 +206,20 @@ return (
                 new THREE.MeshBasicMaterial({ color: node.color || colors.nodes.producerNode })
               );
             }
-          }} */
+          }}  */
           
       />
     </div>
     <div className="absolute top-0 z-20 w-full lg:w-4/12">
 
       <div className="hidden lg:block">
-        <h1 className="text-6xl mt-20 ml-20 leading-tight">Canadian Cinema Data</h1>
-        <div className="text-sm mt-10 ml-20">
-          <p>This 3D graph illustrates the intricate relationships within the Canadian film industry, highlighting the connections between productions, producers, companies, cast, and grips involved. It provides a comprehensive map of these relationships, particularly focusing on producer collaborations.</p>
-        </div>
-        <div className="text-sm mt-2 ml-20">
-          <p>The data for this visualization was meticulously sourced by scraping information from all films produced in Canada, filtered to include productions from the past year.</p>
-        </div>
+      <h1 className="text-6xl mt-20 ml-20 leading-tight font-theBoldFont">Canadian Cinema Relationships</h1>
+          <div className="text-sm mt-10 ml-20 font-coolVetica">
+            <p>This 3D graph illustrates the intricate relationships within the Canadian film industry, highlighting the connections between productions, producers, companies, cast, and grips involved. It provides a comprehensive map of these relationships, particularly focusing on producer collaborations.</p>
+          </div>
+          <div className="text-sm mt-2 ml-20 font-victorianBritania">
+            <p>The data for this visualization was meticulously sourced by scraping information from all films produced in Canada, filtered to include productions from the past year.</p>
+          </div>
       </div>
       <div>
         <div className="mt-5 ml-5 mr-5 lg:mt-20 lg:ml-20 lg:mr-20">

@@ -31,3 +31,24 @@ body {
     text-wrap: balance;
   }
 }
+
+@font-face {
+  font-family: 'TheBoldFont';
+  src: url('/assets/fonts/theboldfont.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'CoolVetica';
+  src: url('/assets/fonts/coolvetica.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'VictorianBritania';
+  src: url('/assets/fonts/VictorianBritania.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Polyamine';
+  src: url('/assets/fonts/Polyamine.ttf') format('truetype');
+}
+
