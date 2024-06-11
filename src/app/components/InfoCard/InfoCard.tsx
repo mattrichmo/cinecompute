@@ -1,11 +1,9 @@
-// infocard.tsx
-
 interface InfoCardProps {
   title: string;
   value: number;
 }
 
-const InfoCard = () => {
+const InfoCard: React.FC<InfoCardProps> = ({ title, value }) => {
   return (
     <div className="absolute top-0 right-0 m-10 z-30 max-w-xs cursor-pointer rounded-lg bg-white p-2 shadow duration-150 hover:scale-105 hover:shadow-md">
       <img className="w-full rounded-lg object-cover object-center" src="./img/default.webp" alt="product" />
