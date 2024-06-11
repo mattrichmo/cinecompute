@@ -24,19 +24,22 @@ const ForceGraph = () => {
   const [activeNode, setActiveNode] = useState(null);
   const [selectedToggle, setSelectedToggle] = useState('Producers');
 
-  const colors = {
-    nodes: {
-      defaultNode: "rgb(255, 105, 180)", // Bright Pink
-      selectedNode: "rgb(255, 165, 0)", // Orange
-      filmNode: "rgb(0, 255, 127)", // Spring Green
-      producerNode: "rgb(255, 105, 180)", // Blue Violet
-    },
-    links: {
-      defaultLink: "rgb(255, 255, 255, 1)", // White
-      selectedLink: "rgb(255, 20, 147, 1)", // Deep Pink
-      highlightedLink: "rgb(50, 205, 50, 1)", // Lime Green
-    },
-  };
+const colors = {
+  nodes: {
+    defaultNode: "rgb(255, 0, 255)", // Neon Purple, bright against dark
+    selectedNode: "rgb(0, 255, 255)", // Bright Cyan, stands out on black
+    filmNode: "rgb(255, 0, 0)", // Neon Red, vivid on black
+    producerNode: "rgb(0, 255, 0)", // Neon Green, luminous on dark
+    gripNode: "rgb(255, 20, 147)", // Deep Pink, vibrant against black
+    companyNode: "rgb(0, 0, 255)", // Bright Blue, radiant on dark
+    castNode: "rgb(255, 165, 0)", // Neon Orange, glowing on black
+  },
+  links: {
+    defaultLink: "rgb(255, 255, 255)", // Semi-transparent White, subtle on black
+    selectedLink: "rgb(255, 255, 0, 1)", // Yellow, bright and clear
+    highlightedLink: "rgb(50, 205, 50, 1)", // Lime Green, vivid against dark
+  },
+};
   
 
   useEffect(() => {
@@ -157,32 +160,6 @@ const handleBackgroundClick = () => {
     fgRef.current.refresh();
   };
 
-  // Calculate min and max number of connections
-  const minConnections = Math.min(...graphData.nodes.map(node => {
-    if (node.values.film) return node.values.film.numConnections || 0;
-    if (node.values.producers) return node.values.producers.numConnections || 0;
-    if (node.values.companies) return node.values.companies.numConnections || 0;
-    if (node.values.cast) return node.values.cast.numConnections || 0;
-    return 0;
-  }));
-
-  const maxConnections = Math.max(...graphData.nodes.map(node => {
-    if (node.values.film) return node.values.film.numConnections || 0;
-    if (node.values.producers) return node.values.producers.numConnections || 0;
-    if (node.values.companies) return node.values.companies.numConnections || 0;
-    if (node.values.cast) return node.values.cast.numConnections || 0;
-    return 0;
-  }));
-
-  const minNodeSize = 1;
-  const maxNodeSize = 30;
-
-  // Function to calculate node size
-  const getNodeSize = (numConnections) => {
-    if (maxConnections === minConnections) return minNodeSize;
-    return minNodeSize + Math.round((numConnections - minConnections) * (maxNodeSize - minNodeSize) / (maxConnections - minConnections));
-  };
-
 return (
   <div style={{ backgroundColor: 'rgba(0, 0, 17, 0.5)' }} className="relative min-h-screen text-white">
     <div className="absolute top-0 left-0 w-full h-full z-10">
@@ -209,13 +186,29 @@ return (
             } else if (clickedNodes.size > 0) {
               return "rgba(255, 255, 255, 0.1)"; // Reduced opacity for non-selected nodes when any node is clicked
             } else {
-              return colors.nodes.defaultNode; // Default node color
+              // Use node type to determine color
+              switch (node.type) {
+                case 'film':
+                  return colors.nodes.filmNode;
+                case 'producer':
+                  return colors.nodes.producerNode;
+                case 'company':
+                  return colors.nodes.companyNode;
+                case 'cast':
+                  return colors.nodes.castNode;
+                case 'grip':
+                  return colors.nodes.gripNode;
+                default:
+                  return colors.nodes.defaultNode; // Default node color
+              }
             }
           }}
+
           nodeVal={node => {
-            return node.values.film?.numConnections || node.values.producers?.numConnections || node.values.companies?.numConnections || node.values.cast?.numConnections || 0;
+            return node.values.film?.numConnections || node.values.producers?.numConnections || node.values.companies?.numConnections || node.values.cast?.numConnections || node.values.grips?.numConnections || 1;
           }}
-          nodeRelSize={3} // Adjust this value as needed to control the relative size of the nodes
+          nodeRelSize={3}
+
           /*  nodeThreeObject={node => {
             if (node.type === 'film') {
               // Create a cube for films
