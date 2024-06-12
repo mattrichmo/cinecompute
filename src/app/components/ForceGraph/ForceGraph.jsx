@@ -92,16 +92,16 @@ const colors = {
     loadData();
   }, [selectedToggle]);
 
-useEffect(() => {
+/* useEffect(() => {
     if (fgRef.current && fgRef.current.postProcessingComposer) {
       // Add bloom processing to links only
       const bloomPass = new UnrealBloomPass();
-      bloomPass.strength = 0.4;
-      bloomPass.radius = 0.5;
-      bloomPass.threshold = 0.6;
+      bloomPass.strength = 0.3;
+      bloomPass.radius = 0.1;
+      bloomPass.threshold = 0.5;
       fgRef.current.postProcessingComposer().addPass(bloomPass);
     }
-  }, [fgRef]);
+  }, [fgRef]); */
 
   const handleNodeClick = useCallback(
     (node) => {
@@ -207,26 +207,9 @@ return (
           nodeVal={node => {
             return node.values.film?.numConnections || node.values.producers?.numConnections || node.values.companies?.numConnections || node.values.cast?.numConnections || node.values.grips?.numConnections || 1;
           }}
-          nodeRelSize={3}
-
-          /*  nodeThreeObject={node => {
-            if (node.type === 'film') {
-              // Create a cube for films
-              return new THREE.Mesh(
-                new THREE.BoxGeometry(10, 10, 10), // Adjust size as needed
-                new THREE.MeshBasicMaterial({ color: node.color || colors.nodes.filmNode })
-              );
-            } else {
-              // Default sphere for other types
-              const radius = 7; // Adjust size as needed
-              const segments = 8; // Increase or decrease for performance or quality
-              return new THREE.Mesh(
-                new THREE.SphereGeometry(radius, segments, segments),
-                new THREE.MeshBasicMaterial({ color: node.color || colors.nodes.producerNode })
-              );
-            }
-          }}  */
-        />
+          nodeRelSize={2}
+          warmupTicks={50} 
+          cooldownTime={10000}       />
     </div>
     <div className="absolute top-0 z-20 w-full lg:w-4/12">
 
