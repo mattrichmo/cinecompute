@@ -1,0 +1,129 @@
+/* Chart.css */
+.chart {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    min-height: 1200px;
+    margin-bottom: 0px;    
+    z-index: 2;
+    
+
+}
+.hero__bar-top {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-ms-flex-direction: column;
+	flex-direction: column;
+	-webkit-box-pack: end;
+	-ms-flex-pack: end;
+	justify-content: flex-end;
+	background-color: #120101;
+}
+
+@media (min-width:960px) {
+    .chart {
+        min-height: clamp(900px, 83.33333vw, 1200px);
+        margin-bottom: 270px;
+    }
+}
+.chart-bar {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    width: 20%;
+    z-index: 2;
+
+}
+
+/* Existing styles */
+.chart-bar-left, .chart-bar-right {
+    position: absolute;
+    height: 100%;
+    width: 10px;
+    background: #120101;
+    background: linear-gradient(180deg, #120101 0%, #120101 50%, rgba(0, 0, 0, 0) 100%);
+}
+
+.chart-bar-left {
+    left: 0;
+}
+
+.chart-bar-right {
+    right: 0;
+}
+
+.chart-bar-top {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    background-color: #120101;
+    margin-left: 10px;
+    height: 100%;
+    width: calc(100% - 20px); /* Corrected to include px */
+}
+
+/* New styles for doubled spacing */
+.double-spacing-left {
+    width: 20px; /* Double the original width */
+}
+
+.double-spacing-right {
+    width: 20px; /* Double the original width */
+}
+
+.chart-bar-text {
+    color: #666;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1;
+
+}
+.chart-bar-number {
+    color: #fd3e12;
+    font-size: 19px;
+    margin-bottom: 5px;
+}
+
+
+
+
+
+
+@media (min-width:960px) {
+    .chart-bar-number {
+        font-size: clamp(28px, 2.29167vw, 33px);
+        margin-bottom: 12px;
+    }
+}
+
+
+@media (min-width:960px) {
+    .chart-bar:after {
+        width: clamp(8px, 1.52778vw, 22px);
+    }
+}
+
+.chart-bar-number span {
+    color: #fd3e12;
+}
+
+.chart-bar-fill {
+    background-color: transparent;
+    flex-grow: 1;
+    flex-basis: 100%;
+}
+.hero__chart-note {
+	position: absolute;
+	top: calc(100vh - 400px);
+	right: 0;
+	font-size: 13px;
+	font-weight: 600;
+	z-index: 50;
+	-webkit-transform: rotate(90deg) translateY(-70px);
+	transform: rotate(90deg) translateY(-70px)
+}

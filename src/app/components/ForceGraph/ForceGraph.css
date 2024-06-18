@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+
 
 :root {
   --foreground-rgb: 0, 0, 0;
@@ -56,10 +54,3 @@ h1, h2, h3 {
   line-height: 1.5em;
 }
 
-/* rest of your CSS */
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-}

@@ -1,0 +1,38 @@
+@font-face {
+    font-family: 'TheBoldFont';
+    src: url('/fonts/theboldfont.otf') format('opentype');
+  }
+  @font-face {
+    font-family: 'CoolVetica';
+    src: url('/fonts/coolvetica.otf') format('opentype');
+  }
+  
+  
+  @font-face {
+    font-family: 'VictorianBritania';
+    src: url('/fonts/VictorianBritania.ttf') format('truetype');
+  }
+  @font-face {
+    font-family: 'Polyamine';
+    src: url('/fonts/Polyamine.ttf') format('truetype');
+  }
+
+  body {
+    font-family: 'TheBoldFont', sans-serif;
+    color: rgb(var(--foreground-rgb));
+    background: linear-gradient(
+        to bottom,
+        transparent,
+        rgb(var(--background-end-rgb))
+      )
+      rgb(var(--background-start-rgb));
+  }
+  
+  p {
+    font-family: 'CoolVetica', sans-serif;
+  }
+  
+  h1, h2, h3 {
+    font-family: 'Polyamine', serif;
+    line-height: 1.5em;
+  }
