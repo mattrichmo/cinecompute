@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect, useMemo } from 'react';
+import React, { useRef, useEffect, useMemo, useState } from 'react';
 import * as d3 from 'd3';
 import chartData from "../../../../public/data/datasets/genreHeatMap.json";
 
@@ -8,20 +8,40 @@ import './GenreHeatMap.css';
 
 const GenreHeatMap = () => {
   const svgRef = useRef();
-
-  const margin = { top: 70, right: 0, bottom: 100, left: 100 };
-  const width = 1200 - margin.left - margin.right;
-  const height = 600 - margin.top - margin.bottom;
-  const gridSize = Math.floor(width / 24);
-  const legendElementWidth = gridSize * 2;
-  const buckets = 11; // Increased number of buckets
-
+  const [dimensions, setDimensions] = useState({
+    width: 1200,
+    height: 600,
+  });
   const colors = useMemo(() => [
     "#ffffff", "#ffffcc", "#ffeda0", "#fed976", "#feb24c", "#fd8d3c", "#fc4e2a", "#e31a1c", "#bd0026", "#800026", "#4a0d0d"
-  ], []); // New color scheme
+  ], []);
+
+  const margin = { top: 70, right: 0, bottom: 100, left: 100 };
+
+  const updateDimensions = () => {
+    const width = window.innerWidth < 768 ? window.innerWidth - 40 : 1200;
+    const height = window.innerWidth < 768 ? window.innerHeight - 40 : 600;
+    setDimensions({ width, height });
+  };
 
   useEffect(() => {
-    const svg = d3.select(svgRef.current)
+    updateDimensions();
+    window.addEventListener('resize', updateDimensions);
+    return () => window.removeEventListener('resize', updateDimensions);
+  }, []);
+
+  useEffect(() => {
+    const width = dimensions.width - margin.left - margin.right;
+    const height = dimensions.height - margin.top - margin.bottom;
+
+    const gridSize = window.innerWidth < 768 ? Math.floor(height / chartData.label.x.length) : Math.floor(width / 24);
+    const legendElementWidth = gridSize * 2;
+    const buckets = 11;
+
+    const svg = d3.select(svgRef.current);
+    svg.selectAll("*").remove();  // Clear existing content
+
+    const g = svg
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
       .append("g")
@@ -47,20 +67,20 @@ const GenreHeatMap = () => {
       .style("opacity", 0);
 
     // Append x-axis
-    svg.append("g")
+    g.append("g")
       .attr("class", "x axis")
       .attr("transform", `translate(0,${height})`)
       .call(d3.axisBottom(xScale));
 
     // Append y-axis
-    svg.append("g")
+    g.append("g")
       .attr("class", "y axis")
       .call(d3.axisLeft(yScale));
 
     // Append heatmap cells
     chartData.data.forEach((yearData) => {
       yearData.genres.forEach((genreData) => {
-        svg.append("rect")
+        g.append("rect")
           .attr("x", xScale(yearData.year))
           .attr("y", yScale(genreData.genre))
           .attr("width", xScale.bandwidth())
@@ -90,7 +110,7 @@ const GenreHeatMap = () => {
     });
 
     // Append legend
-    const legend = svg.selectAll(".legend")
+    const legend = g.selectAll(".legend")
       .data([0].concat(colorScale.quantiles()), d => d);
 
     legend.enter().append("g")
@@ -109,10 +129,10 @@ const GenreHeatMap = () => {
       .attr("y", height + gridSize + 15);
 
     legend.exit().remove();
-  }, [colors, gridSize, height, legendElementWidth, margin.bottom, margin.left, margin.right, margin.top, width]);
+  }, [colors, dimensions, margin.bottom, margin.left, margin.right, margin.top]);
 
   return (
-    <div className="w-full h-full flex">
+    <div className="w-full h-full flex genre-heatmap">
       <svg ref={svgRef}></svg>
     </div>
   );
