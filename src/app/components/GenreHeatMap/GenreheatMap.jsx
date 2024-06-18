@@ -25,7 +25,7 @@ const GenreHeatMap = () => {
       top: 70,
       right: isMobile ? 20 : 0,
       bottom: 100,
-      left: isMobile ? 75 : 100,
+      left: isMobile ? 20 : 100,
     };
     setDimensions({ width, height, margin });
   };
@@ -42,25 +42,27 @@ const GenreHeatMap = () => {
     const adjustedHeight = height - margin.top - margin.bottom;
 
     const gridSize = window.innerWidth < 768 ? Math.floor(adjustedHeight / chartData.label.x.length) : Math.floor(adjustedWidth / 24);
-    const buckets = 11; // Define buckets before using it
-    const legendElementWidth = adjustedWidth / buckets; // Legend width to match chart width
+    const buckets = 11;
+    const legendElementWidth = adjustedWidth / buckets;
+    const legendHeight = gridSize;
+    const legendMarginTop = 100;
 
     const svg = d3.select(svgRef.current);
-    svg.selectAll("*").remove();  // Clear existing content
+    svg.selectAll("*").remove();
 
     const g = svg
       .attr("width", adjustedWidth + margin.left + margin.right)
-      .attr("height", adjustedHeight + margin.top + margin.bottom)
+      .attr("height", adjustedHeight + margin.top + margin.bottom + legendHeight + legendMarginTop) // Add extra height for the legend
       .append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
     const xScale = d3.scaleBand()
-      .domain(chartData.label.y)  // Years on x-axis
+      .domain(chartData.label.y)
       .range([0, adjustedWidth])
       .padding(0.05);
 
     const yScale = d3.scaleBand()
-      .domain(chartData.label.x)  // Genres on y-axis
+      .domain(chartData.label.x)
       .range([adjustedHeight, 0])
       .padding(0.05);
 
@@ -74,10 +76,18 @@ const GenreHeatMap = () => {
       .style("opacity", 0);
 
     // Append x-axis
-    g.append("g")
+    const xAxis = g.append("g")
       .attr("class", "x axis")
       .attr("transform", `translate(0,${adjustedHeight})`)
       .call(d3.axisBottom(xScale));
+
+    if (window.innerWidth < 768) {
+      xAxis.selectAll("text")
+        .attr("transform", "rotate(-90)")
+        .style("text-anchor", "end")
+        .attr("dx", "-0.8em")
+        .attr("dy", "-0.5em");
+    }
 
     // Append y-axis
     g.append("g")
@@ -125,16 +135,17 @@ const GenreHeatMap = () => {
 
     legendGroup.append("rect")
       .attr("x", (d, i) => legendElementWidth * i)
-      .attr("y", adjustedHeight + gridSize)
+      .attr("y", adjustedHeight + legendMarginTop)
       .attr("width", legendElementWidth)
-      .attr("height", gridSize / 2)
+      .attr("height", legendHeight)
       .style("fill", (d, i) => colors[i]);
 
     legendGroup.append("text")
-      .attr("class", "mono text-xs md:text-sm") // Tailwind classes for responsive text size
-      .text(d => `≥ ${Math.round(d)}`)
-      .attr("x", (d, i) => legendElementWidth * i)
-      .attr("y", adjustedHeight + gridSize + 15);
+      .attr("class", "mono text-xs md:text-sm")
+      .attr("text-anchor", "middle")
+      .attr("x", (d, i) => legendElementWidth * i + legendElementWidth / 2)
+      .attr("y", adjustedHeight + legendMarginTop + legendHeight / 2 + 5) // Center vertically
+      .text(d => `≥ ${Math.round(d)}`);
 
     legend.exit().remove();
   }, [colors, dimensions]);
