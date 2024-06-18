@@ -11,17 +11,23 @@ const GenreHeatMap = () => {
   const [dimensions, setDimensions] = useState({
     width: 1200,
     height: 600,
+    margin: { top: 70, right: 0, bottom: 100, left: 100 },
   });
   const colors = useMemo(() => [
     "#ffffff", "#ffffcc", "#ffeda0", "#fed976", "#feb24c", "#fd8d3c", "#fc4e2a", "#e31a1c", "#bd0026", "#800026", "#4a0d0d"
   ], []);
 
-  const margin = { top: 70, right: 0, bottom: 100, left: 100 };
-
   const updateDimensions = () => {
-    const width = window.innerWidth < 768 ? window.innerWidth - 40 : 1200;
-    const height = window.innerWidth < 768 ? window.innerHeight - 40 : 600;
-    setDimensions({ width, height });
+    const isMobile = window.innerWidth < 768;
+    const width = isMobile ? window.innerWidth - 40 : 1200;
+    const height = isMobile ? window.innerHeight - 40 : 600;
+    const margin = {
+      top: 70,
+      right: isMobile ? 20 : 0,
+      bottom: 100,
+      left: isMobile ? 75 : 100,
+    };
+    setDimensions({ width, height, margin });
   };
 
   useEffect(() => {
@@ -31,30 +37,31 @@ const GenreHeatMap = () => {
   }, []);
 
   useEffect(() => {
-    const width = dimensions.width - margin.left - margin.right;
-    const height = dimensions.height - margin.top - margin.bottom;
+    const { width, height, margin } = dimensions;
+    const adjustedWidth = width - margin.left - margin.right;
+    const adjustedHeight = height - margin.top - margin.bottom;
 
-    const gridSize = window.innerWidth < 768 ? Math.floor(height / chartData.label.x.length) : Math.floor(width / 24);
+    const gridSize = window.innerWidth < 768 ? Math.floor(adjustedHeight / chartData.label.x.length) : Math.floor(adjustedWidth / 24);
     const buckets = 11; // Define buckets before using it
-    const legendElementWidth = width / buckets; // Legend width to match chart width
+    const legendElementWidth = adjustedWidth / buckets; // Legend width to match chart width
 
     const svg = d3.select(svgRef.current);
     svg.selectAll("*").remove();  // Clear existing content
 
     const g = svg
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
+      .attr("width", adjustedWidth + margin.left + margin.right)
+      .attr("height", adjustedHeight + margin.top + margin.bottom)
       .append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
     const xScale = d3.scaleBand()
       .domain(chartData.label.y)  // Years on x-axis
-      .range([0, width])
+      .range([0, adjustedWidth])
       .padding(0.05);
 
     const yScale = d3.scaleBand()
       .domain(chartData.label.x)  // Genres on y-axis
-      .range([height, 0])
+      .range([adjustedHeight, 0])
       .padding(0.05);
 
     const maxCount = d3.max(chartData.data, d => d3.max(d.genres, g => g.count));
@@ -69,7 +76,7 @@ const GenreHeatMap = () => {
     // Append x-axis
     g.append("g")
       .attr("class", "x axis")
-      .attr("transform", `translate(0,${height})`)
+      .attr("transform", `translate(0,${adjustedHeight})`)
       .call(d3.axisBottom(xScale));
 
     // Append y-axis
@@ -118,7 +125,7 @@ const GenreHeatMap = () => {
 
     legendGroup.append("rect")
       .attr("x", (d, i) => legendElementWidth * i)
-      .attr("y", height + gridSize)
+      .attr("y", adjustedHeight + gridSize)
       .attr("width", legendElementWidth)
       .attr("height", gridSize / 2)
       .style("fill", (d, i) => colors[i]);
@@ -127,10 +134,10 @@ const GenreHeatMap = () => {
       .attr("class", "mono text-xs md:text-sm") // Tailwind classes for responsive text size
       .text(d => `≥ ${Math.round(d)}`)
       .attr("x", (d, i) => legendElementWidth * i)
-      .attr("y", height + gridSize + 15);
+      .attr("y", adjustedHeight + gridSize + 15);
 
     legend.exit().remove();
-  }, [colors, dimensions, margin.bottom, margin.left, margin.right, margin.top]);
+  }, [colors, dimensions]);
 
   return (
     <div className="w-full h-full flex genre-heatmap">
