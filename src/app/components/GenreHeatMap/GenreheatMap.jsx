@@ -35,8 +35,8 @@ const GenreHeatMap = () => {
     const height = dimensions.height - margin.top - margin.bottom;
 
     const gridSize = window.innerWidth < 768 ? Math.floor(height / chartData.label.x.length) : Math.floor(width / 24);
-    const legendElementWidth = gridSize * 2;
-    const buckets = 11;
+    const buckets = 11; // Define buckets before using it
+    const legendElementWidth = width / buckets; // Legend width to match chart width
 
     const svg = d3.select(svgRef.current);
     svg.selectAll("*").remove();  // Clear existing content
@@ -113,17 +113,18 @@ const GenreHeatMap = () => {
     const legend = g.selectAll(".legend")
       .data([0].concat(colorScale.quantiles()), d => d);
 
-    legend.enter().append("g")
-      .attr("class", "legend")
-      .append("rect")
+    const legendGroup = legend.enter().append("g")
+      .attr("class", "legend");
+
+    legendGroup.append("rect")
       .attr("x", (d, i) => legendElementWidth * i)
       .attr("y", height + gridSize)
       .attr("width", legendElementWidth)
       .attr("height", gridSize / 2)
       .style("fill", (d, i) => colors[i]);
 
-    legend.enter().append("text")
-      .attr("class", "mono")
+    legendGroup.append("text")
+      .attr("class", "mono text-xs md:text-sm") // Tailwind classes for responsive text size
       .text(d => `≥ ${Math.round(d)}`)
       .attr("x", (d, i) => legendElementWidth * i)
       .attr("y", height + gridSize + 15);
