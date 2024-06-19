@@ -2,7 +2,8 @@
 
 import React, { useRef, useEffect, useMemo, useState } from 'react';
 import * as d3 from 'd3';
-import chartData from "../../../../public/data/datasets/genreHeatMap.json";
+import chartData from "../../../../public/data/datasets/genreHeatMap.json"
+import GenreTable from './components/GenreTable/GenreTable';
 
 import './GenreHeatMap.css';
 
@@ -13,6 +14,7 @@ const GenreHeatMap = () => {
     height: 600,
     margin: { top: 70, right: 0, bottom: 100, left: 100 },
   });
+  const [selectedItem, setSelectedItem] = useState(null); // state for selected item
   const colors = useMemo(() => [
     "#ffffff", "#ffffcc", "#ffeda0", "#fed976", "#feb24c", "#fd8d3c", "#fc4e2a", "#e31a1c", "#bd0026", "#800026", "#4a0d0d"
   ], []);
@@ -104,6 +106,7 @@ const GenreHeatMap = () => {
           .attr("height", yScale.bandwidth())
           .style("fill", colorScale(genreData.count))
           .style("stroke-width", 0)
+          .attr("class", `heatmap-cell-${yearData.year}-${genreData.genre}`)
           .on("mouseover", function(event) {
             d3.select(this).style("stroke", "black").style("stroke-width", 2);
             tooltip
@@ -122,6 +125,9 @@ const GenreHeatMap = () => {
               .duration(500)
               .style("opacity", 0)
               .on("end", () => tooltip.classed("hidden", true));
+          })
+          .on("click", function() {
+            setSelectedItem({ year: yearData.year, genre: genreData.genre, items: genreData.items });
           });
       });
     });
@@ -150,11 +156,33 @@ const GenreHeatMap = () => {
     legend.exit().remove();
   }, [colors, dimensions]);
 
+  useEffect(() => {
+    if (selectedItem) {
+      d3.selectAll("rect").style("stroke", "none");
+      d3.select(`.heatmap-cell-${selectedItem.year}-${selectedItem.genre}`)
+        .style("stroke", "yellow")
+        .style("stroke-width", 3);
+    }
+  }, [selectedItem]);
   return (
-    <div className="w-full h-full flex genre-heatmap">
-      <svg ref={svgRef}></svg>
+    <div>
+      <div className="border border-gray-700 rounded-lg shadow-lg p-4 bg-gray-800">
+        <svg ref={svgRef}></svg>
+      </div>
+      {/* Displaying the selected year and genre in a clean header */}
+      {selectedItem && (
+        <div className="text-center mt-4">
+          <h2 className="text-lg font-semibold text-gray-200">
+            {`${selectedItem.year} - ${selectedItem.genre}`}
+          </h2>
+        </div>
+      )}
+      <div className="mt-12">
+        <GenreTable data={selectedItem ? selectedItem.items : []} /> {/* Pass the selected items to GenreTable */}
+      </div>
     </div>
   );
+  
 };
 
 export default GenreHeatMap;
