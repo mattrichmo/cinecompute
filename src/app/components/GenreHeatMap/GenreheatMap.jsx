@@ -167,6 +167,12 @@ const GenreHeatMap = () => {
   return (
     <div>
       <div className="border border-gray-700 rounded-lg shadow-lg p-4 bg-gray-800">
+        {/* Title for the chart */}
+        <div className="text-center text-md font-semibold text-gray-200 mb-4">
+            <h2>
+          Films Produced Per Genre vs Year
+          </h2>
+        </div>
         <svg ref={svgRef}></svg>
       </div>
       {/* Displaying the selected year and genre in a clean header */}
@@ -182,6 +188,7 @@ const GenreHeatMap = () => {
       </div>
     </div>
   );
+  
   
 };
 

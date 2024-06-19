@@ -8,7 +8,7 @@ const GenreTable = ({ data }) => {
         <thead className="text-white border-b border-pink-300">
           <tr>
             <th className="px-6 py-3 text-left">Title</th>
-            <th className="px-6 py-3 text-left">IMDb ID</th>
+            <th className="px-6 py-3 text-left">IMDb Link</th>
           </tr>
         </thead>
         <tbody>
