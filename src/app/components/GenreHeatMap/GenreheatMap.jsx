@@ -45,14 +45,14 @@ const GenreHeatMap = () => {
     const buckets = 11;
     const legendElementWidth = adjustedWidth / buckets;
     const legendHeight = gridSize;
-    const legendMarginTop = 100;
+    const legendTopMargin = 100;
 
     const svg = d3.select(svgRef.current);
     svg.selectAll("*").remove();
 
     const g = svg
       .attr("width", adjustedWidth + margin.left + margin.right)
-      .attr("height", adjustedHeight + margin.top + margin.bottom + legendHeight + legendMarginTop) // Add extra height for the legend
+      .attr("height", adjustedHeight + margin.top + margin.bottom + legendHeight + legendTopMargin) // Add extra height for the legend
       .append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
@@ -135,7 +135,7 @@ const GenreHeatMap = () => {
 
     legendGroup.append("rect")
       .attr("x", (d, i) => legendElementWidth * i)
-      .attr("y", adjustedHeight + legendMarginTop)
+      .attr("y", adjustedHeight + legendTopMargin)
       .attr("width", legendElementWidth)
       .attr("height", legendHeight)
       .style("fill", (d, i) => colors[i]);
@@ -144,7 +144,7 @@ const GenreHeatMap = () => {
       .attr("class", "mono text-xs md:text-sm")
       .attr("text-anchor", "middle")
       .attr("x", (d, i) => legendElementWidth * i + legendElementWidth / 2)
-      .attr("y", adjustedHeight + legendMarginTop + legendHeight / 2 + 5) // Center vertically
+      .attr("y", adjustedHeight + legendTopMargin + legendHeight / 2 + 5) // Center vertically
       .text(d => `≥ ${Math.round(d)}`);
 
     legend.exit().remove();
