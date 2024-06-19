@@ -4,7 +4,7 @@ import Link from "next/link";
 const GenreTable = ({ data }) => {
   return (
     <div className="flex justify-center">
-      <table className="w-full max-w-4xl shadow-md bg-white bg-opacity-10 mx-12 md:mx-6">
+      <table className="w-full max-w-4xl shadow-md bg-white bg-opacity-10 lg:mx-12 md:mx-3 sm:mx-2">
         <thead className="text-white border-b border-pink-300">
           <tr>
             <th className="px-6 py-3 text-left">Title</th>
