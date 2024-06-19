@@ -25,7 +25,7 @@ const GenreHeatMap = () => {
       top: 70,
       right: isMobile ? 20 : 0,
       bottom: 100,
-      left: isMobile ? 20 : 100,
+      left: isMobile ? 50 : 100,
     };
     setDimensions({ width, height, margin });
   };
